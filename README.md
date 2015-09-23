@@ -11,7 +11,7 @@
 Legajo | Apellido, Nombre | email | 
  ------------- | ------------- | -------------
 138.822-8 | Mauro, Leandro | lemmau@hotmail.com.
-117.197-5 | Safran, Maximiliano | maxizero@gmail.com
-137.791-7 | Pomajulca Gonzales, Melyna | mel.pg@gmail.com
-* | Wieja, Marcelo | @gmail.com
+117.197-5 | Safran, Maximiliano | maxizero@gmail.com.
+137.791-7 | Pomajulca Gonzales, Melyna | mel.pg@gmail.com.
+114.959-3 | Wieja, Marcelo | mdw.arg@gmail.com.
 
