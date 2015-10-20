@@ -1,0 +1,5 @@
+C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\SharedData\bin\Debug\SharedData.dll
+C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\SharedData\bin\Debug\SharedData.pdb
+C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\SharedData\obj\Debug\SharedData.csprojResolveAssemblyReference.cache
+C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\SharedData\obj\Debug\SharedData.dll
+C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\SharedData\obj\Debug\SharedData.pdb

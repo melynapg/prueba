@@ -1,4 +1,9 @@
-/* --		Son un total de 19 tablas
+/* --		
+	Son un total de 19 tablas
+	
+	Sacar esto cuando lo entreguemos porque solo esta para testing. 
+	SI falla -> correr varias veces asi "vuelan" las restricciones de FK
+
 DROP TABLE [HAY_TABLA].VIAJE
 DROP TABLE [HAY_TABLA].AERONAVE
 DROP TABLE [HAY_TABLA].USUARIO
@@ -18,11 +23,13 @@ DROP TABLE [HAY_TABLA].PRODUCTO
 DROP TABLE [HAY_TABLA].ROL
 DROP TABLE [HAY_TABLA].FUNCIONALIDAD_ROL
 DROP TABLE [HAY_TABLA].FUNCIONALIDAD
+
+DROP PROCEDURE [HAY_TABLA].SP_get_rol_by_id
+
 DROP SCHEMA [HAY_TABLA]
 */
 
 USE [GD2C2015]
-
 GO
 
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name='HAY_TABLA')
@@ -37,7 +44,7 @@ print 'Inicio de Instrucciones DDL.'
 CREATE TABLE [HAY_TABLA].ROL
 (
 ID			INT IDENTITY(1,1) NOT NULL,
-NOMBRE		VARCHAR(50) NOT NULL,
+NOMBRE		VARCHAR(50) UNIQUE NOT NULL,
 STATUS		BIT NOT NULL DEFAULT 1,	-- todos activos por default
 
 PRIMARY KEY (ID)
@@ -306,7 +313,7 @@ SET IDENTITY_INSERT [HAY_TABLA].FUNCIONALIDAD ON
 SET IDENTITY_INSERT [HAY_TABLA].FUNCIONALIDAD OFF
 
 ----------------------------------------------------
--- FUNCIONALIDAD disponibles para c/u de los ROL
+-- FUNCIONALIDADES disponibles para c/u de los ROLES
 ----------------------------------------------------
 	--Administrativos
 	INSERT INTO [HAY_TABLA].FUNCIONALIDAD_ROL (ID_ROL,ID_FUNCIONALIDAD) VALUES (1,1)
@@ -324,12 +331,12 @@ SET IDENTITY_INSERT [HAY_TABLA].FUNCIONALIDAD OFF
 	INSERT INTO [HAY_TABLA].FUNCIONALIDAD_ROL (ID_ROL,ID_FUNCIONALIDAD) VALUES (2,7)
 	INSERT INTO [HAY_TABLA].FUNCIONALIDAD_ROL (ID_ROL,ID_FUNCIONALIDAD) VALUES (2,9)
 ------------------------------------------------------
---- user ADMIN
+--- users ADMIN
 ------------------------------------------------------
 
 INSERT INTO [HAY_TABLA].USUARIO
 (ID_ROL, USERNAME, PASSWORD, INTENTOSFALLIDOS, STATUS) VALUES
-(1, N'admin01', N'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0, 1)	-- password : 'w23e'
+(1, N'admin', N'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0, 1)	-- password : 'w23e'
 GO
 
 INSERT INTO [HAY_TABLA].USUARIO
@@ -342,3 +349,74 @@ INSERT INTO [HAY_TABLA].USUARIO
 (1, N'admin03', N'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0, 1)	-- password : 'w23e'
 GO
 
+/***********************************************STORED PROCEDURES*********************************************/
+/*	ONLY FOR TEST (DB conection in Program.cs)
+CREATE PROCEDURE [HAY_TABLA].[sp_insertar_rol]
+	@nombre nvarchar(50),
+	@estado bit
+AS
+BEGIN
+	
+	if (exists(select id from [HAY_TABLA].ROL where NOMBRE = @nombre))
+		begin
+			RAISERROR(N'Ya existe un Rol con ese nombre',16,1)
+			return
+		end		
+		
+	INSERT INTO [HAY_TABLA].ROL  (NOMBRE, STATUS)
+    OUTPUT
+		inserted.id
+    VALUES
+          (@nombre, @estado)
+END
+GO
+*/
+CREATE PROCEDURE [HAY_TABLA].[sp_get_usuario_by_id]
+	@id int
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT ID, ID_ROL, USERNAME, PASSWORD, INTENTOSFALLIDOS
+	FROM [HAY_TABLA].USUARIO
+	WHERE USUARIO.Id = @id
+END
+GO
+
+CREATE PROCEDURE [HAY_TABLA].[sp_get_usuario_by_login]
+	@username varchar(255),
+	@password varchar(256)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT ID, ID_ROL, USERNAME, PASSWORD, INTENTOSFALLIDOS
+	FROM [HAY_TABLA].USUARIO
+	WHERE USERNAME = @username AND PASSWORD = @password AND STATUS = 1
+END
+GO
+
+CREATE PROCEDURE [HAY_TABLA].[sp_get_usuario_intentos]
+	@username varchar(255)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT INTENTOSFALLIDOS
+	FROM [HAY_TABLA].USUARIO
+	WHERE USERNAME = @username
+END
+GO
+
+CREATE PROCEDURE [HAY_TABLA].[sp_set_usuario_intentos]
+	@username varchar(255),
+	@intentos int
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	UPDATE [HAY_TABLA].USUARIO 
+	SET INTENTOSFALLIDOS = @intentos 
+	WHERE USERNAME = @username
+END
+GO
