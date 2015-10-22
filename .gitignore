@@ -3,6 +3,10 @@ code/AerolineaFrba/AerolineaFrba/obj/Debug/*
 
 doc/Base de Datos/gd_esquema.Schema.sql
 
+# agrego esta linea asi puedo trabajar con el proyecto desde otra instancia sin necesidad
+# de estar cambiando los datos de conexion a la DB.
+code/AerolineaFrba/AerolineaFrba/App.config
+
 *.csproj.user
 *.resharper.user
 *.resharper
