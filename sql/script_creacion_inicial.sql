@@ -25,6 +25,9 @@ DROP TABLE [HAY_TABLA].FUNCIONALIDAD_ROL
 DROP TABLE [HAY_TABLA].FUNCIONALIDAD
 
 DROP PROCEDURE [HAY_TABLA].[sp_get_rol_by_id]
+DROP PROCEDURE [HAY_TABLA].[sp_insertar_rol]
+DROP PROCEDURE [HAY_TABLA].[sp_baja_rol]
+DROP PROCEDURE [HAY_TABLA].[sp_select_roles]
 DROP PROCEDURE [HAY_TABLA].[sp_get_usuario_by_id]
 DROP PROCEDURE [HAY_TABLA].[sp_get_usuario_by_login]
 DROP PROCEDURE [HAY_TABLA].[sp_get_usuario_intentos]
@@ -79,7 +82,6 @@ ID_ROL				INT NOT NULL,
 USERNAME			NVARCHAR(255) UNIQUE NOT NULL,
 PASSWORD			NVARCHAR(255),	-- mediante encriptacion SHA256
 INTENTOSFALLIDOS	INT NOT NULL DEFAULT 0,	-- al llegar a 3 se pone STATUS en 0
-STATUS				BIT NOT NULL DEFAULT 1,
 
 PRIMARY KEY (ID),
 FOREIGN KEY (ID_ROL) REFERENCES [HAY_TABLA].ROL
@@ -349,18 +351,18 @@ print 'Funcionalidades creadas!'
 --- users ADMIN
 ------------------------------------------------------
 INSERT INTO [HAY_TABLA].USUARIO
-(ID_ROL, USERNAME, PASSWORD, INTENTOSFALLIDOS, STATUS) VALUES
-(1, N'admin', N'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0, 1)	-- password : 'w23e'
+(ID_ROL, USERNAME, PASSWORD, INTENTOSFALLIDOS) VALUES
+(1, N'admin', N'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0)	-- password : 'w23e'
 GO
 
 INSERT INTO [HAY_TABLA].USUARIO
-(ID_ROL, USERNAME, PASSWORD, INTENTOSFALLIDOS, STATUS) VALUES
-(1, N'admin02', N'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0, 1)	-- password : 'w23e'
+(ID_ROL, USERNAME, PASSWORD, INTENTOSFALLIDOS) VALUES
+(1, N'admin02', N'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0)	-- password : 'w23e'
 GO
 
 INSERT INTO [HAY_TABLA].USUARIO
-(ID_ROL, USERNAME, PASSWORD, INTENTOSFALLIDOS, STATUS) VALUES
-(1, N'admin03', N'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0, 1)	-- password : 'w23e'
+(ID_ROL, USERNAME, PASSWORD, INTENTOSFALLIDOS) VALUES
+(1, N'admin03', N'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0)	-- password : 'w23e'
 GO
 print 'Usuarios administrativos creados ok!'
 
@@ -421,9 +423,26 @@ VALUES
 ('Cuatriciclo Yamaha 700', 25, 199000)
 GO
 print 'Productos para canjes creados ok!'
+GO
 
 /***********************************************STORED PROCEDURES*********************************************/
-/*	ONLY FOR TEST (DB conection in Program.cs)
+CREATE PROCEDURE [HAY_TABLA].[sp_get_rol_by_id]
+	@id int
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT 
+		Id,
+		Nombre,
+		Status
+	FROM 
+		[HAY_TABLA].Rol
+	WHERE
+		Id = @id
+END
+GO
+
 CREATE PROCEDURE [HAY_TABLA].[sp_insertar_rol]
 	@nombre NVARCHAR(50),
 	@estado bit
@@ -443,8 +462,40 @@ BEGIN
           (@nombre, @estado)
 END
 GO
-*/
+
+CREATE PROCEDURE [HAY_TABLA].[sp_baja_rol]
+	@id	int
+AS
+BEGIN
+	SET NOCOUNT ON;
+	UPDATE 
+		[HAY_TABLA].ROL
+	SET 
+		STATUS = 0
+	WHERE
+		id = @id
+END
 GO
+
+CREATE PROCEDURE [HAY_TABLA].[sp_select_roles]
+	@nombre nvarchar(50)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT
+		Id,
+		Nombre,
+		Status
+	FROM	
+		[HAY_TABLA].Rol
+	WHERE		
+		((@nombre is null) or Nombre like '%' + @nombre + '%')
+	ORDER BY
+		Nombre 
+END
+GO
+
 CREATE PROCEDURE [HAY_TABLA].[sp_get_usuario_by_id]
 	@id int
 AS
@@ -466,7 +517,7 @@ BEGIN
 
 	SELECT ID, ID_ROL, USERNAME, PASSWORD, INTENTOSFALLIDOS
 	FROM [HAY_TABLA].USUARIO
-	WHERE USERNAME = @username AND PASSWORD = @password AND STATUS = 1
+	WHERE USERNAME = @username AND PASSWORD = @password
 END
 GO
 
@@ -508,4 +559,16 @@ GO
   		SELECT DISTINCT Tipo_Servicio, 0
   		FROM gd_esquema.Maestra
 
+/*
+--- MIGRACION - BUTACAS (Un total de XXX registros en tabla MASTER)
+	SET IDENTITY_INSERT [HAY_TABLA].BUTACA ON
+		INSERT INTO [HAY_TABLA].BUTACA
+		(NUMERO, ID_AERONAVE, TIPO, PISO)
 
+  		SELECT Butacaca_Nro, XXX , Butaca_Tipo, Butaca_Piso
+  		FROM gd_esquema.Maestra M
+  		WHERE M.Butaca_Tipo <> '0'
+  		GROUP BY M.Ruta_Ciudad_Origen, M.Ruta_Ciudad_Destino, M.Aeronave_Fabricante, M.Aeronave_Matricula, M.Aeronave_Modelo, M.Aeronave_KG_Disponibles
+
+  	SET IDENTITY_INSERT [HAY_TABLA].BUTACA OFF
+*/
