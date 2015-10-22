@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AerolineaFrba.Login;
+using Configuracion;
 
 namespace AerolineaFrba
 {
@@ -21,11 +22,17 @@ namespace AerolineaFrba
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            // Ingreso a terminal Autoservicio
+            SharedData.Instance().currentUserId = 0;
+            SharedData.Instance().currentRolId = SharedData.Instance().guestRolId;
+            Login.Menu _menu = new Login.Menu();
+            _menu.Show();
+            this.Hide();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            // Ingreso al sistema como Administrador via login
             Login.IngresoLogin ingreso = new Login.IngresoLogin();
             ingreso.Show();
             this.Hide();

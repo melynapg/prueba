@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Logica;
-using SharedData;
+using Configuracion;
 
 namespace AerolineaFrba.Login
 {
@@ -17,6 +17,21 @@ namespace AerolineaFrba.Login
         public Menu()
         {
             InitializeComponent();
+            if (SharedData.Instance().currentRolId != 0)
+            {
+                //Rol _rol = Rol.GetById(SharedData.Instance().currentRolId);
+                foreach (ToolStripMenuItem item in menuStripSecciones.Items)
+                {
+                    foreach (ToolStripMenuItem innerItem in item.DropDownItems)
+                    {
+                        // MessageBox.Show("valores debug:" + innerItem.Tag.ToString());
+                        innerItem.Visible = (FuncionalidadDeRol.GetById(SharedData.Instance().currentRolId, innerItem.Tag.ToString()).Where(x => x.Seleccionado).ToList().Count > 0);
+                    }
+                }
+                menuStripSecciones.Refresh();
+            }
+
+            lbFecha.Text = lbFecha.Text + " " + SharedData.Instance().fechaDelSistema.ToShortDateString();
         }
 
         private void toolStripDropDownButton1_Click(object sender, EventArgs e)
@@ -30,6 +45,26 @@ namespace AerolineaFrba.Login
         }
 
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ciudadesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Menu_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void seccionesToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }

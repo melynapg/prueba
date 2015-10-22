@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedData
+namespace Configuracion
 {
     public class SharedData
     {
@@ -32,7 +32,7 @@ namespace SharedData
                 oInstance.currentUserId = 0;
                 oInstance.currentRolId = 0;
 
-                oInstance.guestRolId = 3;
+                oInstance.guestRolId = 2;
 
                 oInstance.accionAlta = 1;
                 oInstance.accionModificacion = 2;

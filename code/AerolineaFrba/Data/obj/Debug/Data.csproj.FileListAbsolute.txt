@@ -3,3 +3,8 @@ C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + conten
 C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\Data\bin\Debug\Data.pdb
 C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\Data\obj\Debug\Data.dll
 C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\Data\obj\Debug\Data.pdb
+C:\Users\lemmau\git\aerolineasFRBa\code\AerolineaFrba\Data\bin\Debug\Data.dll
+C:\Users\lemmau\git\aerolineasFRBa\code\AerolineaFrba\Data\bin\Debug\Data.pdb
+C:\Users\lemmau\git\aerolineasFRBa\code\AerolineaFrba\Data\obj\Debug\Data.csprojResolveAssemblyReference.cache
+C:\Users\lemmau\git\aerolineasFRBa\code\AerolineaFrba\Data\obj\Debug\Data.dll
+C:\Users\lemmau\git\aerolineasFRBa\code\AerolineaFrba\Data\obj\Debug\Data.pdb

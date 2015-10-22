@@ -41,7 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
+    <Compile Include="Funcionalidad.cs" />
+    <Compile Include="FuncionalidadesDeRol.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rol.cs" />
     <Compile Include="Usuario.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

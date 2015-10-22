@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Configuration;
+using Configuracion;
 //using System.Data.SqlClient;
 //using System.Data;
 
@@ -39,6 +41,9 @@ namespace AerolineaFrba
             //}
 
             //MessageBox.Show("ejecute la sp mas pelotuda");
+
+            if (ConfigurationManager.AppSettings["FechaDelSistema"] != "")
+                SharedData.Instance().fechaDelSistema = DateTime.ParseExact(ConfigurationManager.AppSettings["FechaDelSistema"], "yyyy-MM-dd", null);
 
             Application.Run(new Inicial());
         }

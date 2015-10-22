@@ -5,3 +5,10 @@ C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + conten
 C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\Logica\obj\Debug\Logica.csprojResolveAssemblyReference.cache
 C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\Logica\obj\Debug\Logica.dll
 C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\Logica\obj\Debug\Logica.pdb
+C:\Users\lemmau\git\aerolineasFRBa\code\AerolineaFrba\Logica\bin\Debug\Logica.dll
+C:\Users\lemmau\git\aerolineasFRBa\code\AerolineaFrba\Logica\bin\Debug\Logica.pdb
+C:\Users\lemmau\git\aerolineasFRBa\code\AerolineaFrba\Logica\bin\Debug\Data.dll
+C:\Users\lemmau\git\aerolineasFRBa\code\AerolineaFrba\Logica\bin\Debug\Data.pdb
+C:\Users\lemmau\git\aerolineasFRBa\code\AerolineaFrba\Logica\obj\Debug\Logica.csprojResolveAssemblyReference.cache
+C:\Users\lemmau\git\aerolineasFRBa\code\AerolineaFrba\Logica\obj\Debug\Logica.dll
+C:\Users\lemmau\git\aerolineasFRBa\code\AerolineaFrba\Logica\obj\Debug\Logica.pdb
