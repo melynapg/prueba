@@ -73,6 +73,7 @@
             this.Controls.Add(this.ingresoUsuario);
             this.Controls.Add(this.btnAutoservicio);
             this.Name = "Inicial";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AerolineasFRBA";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);

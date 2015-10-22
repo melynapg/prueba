@@ -44,3 +44,20 @@ C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + conten
 C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\bin\Debug\SharedData.pdb
 C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.Login.IngresoLogin.resources
 C:\Users\lemmau\Dropbox\Public\GDD\TP GDD 2015 - HAY_TABLA\enunciado tp + contenido rar catedra\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.Login.Menu.resources
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\bin\Debug\AerolineaFrba.exe.config
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.exe
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.pdb
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\bin\Debug\AerolineaFrba.exe
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\bin\Debug\AerolineaFrba.pdb
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\bin\Debug\Logica.dll
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\bin\Debug\SharedData.dll
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\bin\Debug\Data.dll
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\bin\Debug\Logica.pdb
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\bin\Debug\SharedData.pdb
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\bin\Debug\Data.pdb
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.csprojResolveAssemblyReference.cache
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.Inicial.resources
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.Login.IngresoLogin.resources
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.Login.Menu.resources
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.Properties.Resources.resources
+C:\Users\lemmau\git\aerolineasFRBA\code\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.csproj.GenerateResource.Cache

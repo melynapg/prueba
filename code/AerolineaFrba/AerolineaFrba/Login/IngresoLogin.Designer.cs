@@ -102,6 +102,7 @@
             this.Controls.Add(this.btnSalir);
             this.Controls.Add(this.btnIngresar);
             this.Name = "IngresoLogin";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ingreso";
             this.Load += new System.EventHandler(this.Ingreso_Load);
             this.ResumeLayout(false);
