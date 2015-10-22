@@ -1,0 +1,32 @@
+code/AerolineaFrba/AerolineaFrba/bin/Debug/*
+code/AerolineaFrba/AerolineaFrba/obj/Debug/*
+
+doc/Base de Datos/gd_esquema.Schema.sql
+
+*.csproj.user
+*.resharper.user
+*.resharper
+*.suo
+*.cache
+*.dll
+*.pdb
+*.log
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Mac desktop service store files
+.DS_Store
+
+# SASS Compiler cache
+.sass-cache
+
+# Visual Studio 2014 CTP
+**/*.sln.ide
