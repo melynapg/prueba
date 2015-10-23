@@ -90,8 +90,8 @@ GO
 
 CREATE TABLE [HAY_TABLA].CLIENTE (
 ID 					INT IDENTITY(1,1) NOT NULL,
-ID_ROL				INT NOT NULL,
-DNI 				INT UNIQUE NOT NULL,
+ID_ROL				INT NOT NULL DEFAULT 2, -- ROL 2 (GUEST)
+DNI 				INT NOT NULL, -- UNIQUE 
 NOMBRE				NVARCHAR(255),
 APELLIDO			NVARCHAR(255),
 DIRECCION			NVARCHAR(255),
@@ -165,7 +165,7 @@ GO
 
 CREATE TABLE [HAY_TABLA].AERONAVE (
 ID 						INT IDENTITY(1,1) NOT NULL,
-NUMERO 					INT UNIQUE NOT NULL,
+--NUMERO 				INT UNIQUE NOT NULL,
 FECHAALTA				DATETIME,
 ID_SERVICIO				INT NOT NULL,
 MODELO					NVARCHAR(255) NOT NULL,
@@ -173,10 +173,10 @@ MATRICULA				NVARCHAR(255) NOT NULL,
 FABRICANTE				NVARCHAR(255) NOT NULL,
 CANTBUTACAS				INT NOT NULL,
 ESPACIOKGENCOMIENDAS	INT NOT NULL,
-BAJAFUERASERVICIO		BIT NOT NULL DEFAULT 0,
+BAJAFUERASERVICIO		BIT NOT NULL DEFAULT 0, -- false
 FECHAFUERASERVICIO		DATETIME,
 FECHAALTAREINICIO		DATETIME,
-BAJAVIDAUTIL			BIT NOT NULL,
+BAJAVIDAUTIL			BIT NOT NULL DEFAULT 0,	-- false
 FECHABAJADEFINITIVA 	DATETIME,
 
 PRIMARY KEY (ID),
@@ -204,6 +204,7 @@ CODIGORUTA 				INT NOT NULL,
 FECHASALIDA 			DATETIME NOT NULL,
 FECHALLEGADA 			DATETIME NOT NULL,
 FECHALLEGADAESTIMADA 	DATETIME NOT NULL,
+STATUS 					BIT NOT NULL DEFAULT 0, -- no realizado / realizado
 
 PRIMARY KEY (ID)
 );
@@ -212,7 +213,7 @@ GO
 CREATE TABLE [HAY_TABLA].TIPOTARJETA
 (
 ID					INT IDENTITY(1,1) NOT NULL,
-DESCRIPCION			NVARCHAR(50) NOT NULL,
+NOMBRE 				NVARCHAR(50) NOT NULL,
 CANTCUOTAS 			INT NOT NULL,
 
 PRIMARY KEY (ID)
@@ -223,12 +224,14 @@ CREATE TABLE [HAY_TABLA].TARJETA
 (
 ID					INT IDENTITY(1,1) NOT NULL,
 ID_TIPOTARJETA 		INT NOT NULL,
+ID_CLIENTE 			INT NOT NULL,
 NUMERO				INT NOT NULL,
 CLAVE				INT NOT NULL,
 FECHAVTO			DATETIME NOT NULL,
 
 PRIMARY KEY (ID),
-FOREIGN KEY(ID_TIPOTARJETA) REFERENCES [HAY_TABLA].TIPOTARJETA
+FOREIGN KEY(ID_TIPOTARJETA) REFERENCES [HAY_TABLA].TIPOTARJETA,
+FOREIGN KEY(ID_CLIENTE) REFERENCES [HAY_TABLA].CLIENTE
 );
 GO
 
@@ -297,7 +300,7 @@ GO
 print 'Fin de Instrucciones DDL.'
 /*************************************************** INSERTS ******************************************************/
 -- INSERCIONES en:
---				ROLES / FUNCIONALIDADES / FUNCIONALIDADES X ROL / USUARIOS
+--				ROLES / FUNCIONALIDADES / FUNCIONALIDADES X ROL / USUARIOS / PRODUCTOS
 -----------------------------------------------------------------------------------------------
 
 SET IDENTITY_INSERT [HAY_TABLA].ROL ON
@@ -310,10 +313,10 @@ print 'Roles creados!'
 -- La funcionalidad "Registro de Usuario" SE DECIDIÓ POR NO HACER (segun la cátedra !!!)
 SET IDENTITY_INSERT [HAY_TABLA].FUNCIONALIDAD ON
 	INSERT INTO [HAY_TABLA].FUNCIONALIDAD (ID, NOMBRE) VALUES(1,'LOGIN');
-	INSERT INTO [HAY_TABLA].FUNCIONALIDAD (ID, NOMBRE) VALUES(2,'ABM DE ROL');
-	INSERT INTO [HAY_TABLA].FUNCIONALIDAD (ID, NOMBRE) VALUES(3,'ABM DE CIUDAD');	-- solo para búsqueda y A/B (logica)
-	INSERT INTO [HAY_TABLA].FUNCIONALIDAD (ID, NOMBRE) VALUES(4,'ABM DE RUTA AEREA');
-	INSERT INTO [HAY_TABLA].FUNCIONALIDAD (ID, NOMBRE) VALUES(5,'ABM DE AERONAVE');
+	INSERT INTO [HAY_TABLA].FUNCIONALIDAD (ID, NOMBRE) VALUES(2,'ABM. DE ROL');
+	INSERT INTO [HAY_TABLA].FUNCIONALIDAD (ID, NOMBRE) VALUES(3,'ABM. DE CIUDAD');	-- solo para búsqueda y A/B (logica)
+	INSERT INTO [HAY_TABLA].FUNCIONALIDAD (ID, NOMBRE) VALUES(4,'ABM. DE RUTA AEREA');
+	INSERT INTO [HAY_TABLA].FUNCIONALIDAD (ID, NOMBRE) VALUES(5,'ABM. DE AERONAVE');
 	INSERT INTO [HAY_TABLA].FUNCIONALIDAD (ID, NOMBRE) VALUES(6,'GENERACION DE VIAJE');
 	INSERT INTO [HAY_TABLA].FUNCIONALIDAD (ID, NOMBRE) VALUES(7,'REGISTRO DE LLEGADA A DESTINO');
 	INSERT INTO [HAY_TABLA].FUNCIONALIDAD (ID, NOMBRE) VALUES(8,'COMPRA DE PASAJE/ENCOMIENDA');
@@ -425,6 +428,8 @@ GO
 print 'Productos para canjes creados ok!'
 GO
 
+print 'Fin de INSERCIONES manuales.'
+GO
 /***********************************************STORED PROCEDURES*********************************************/
 CREATE PROCEDURE [HAY_TABLA].[sp_get_rol_by_id]
 	@id int
@@ -472,30 +477,6 @@ BEGIN
 		[HAY_TABLA].ROL
 	SET 
 		STATUS = 0
-	WHERE
-		id = @id
-END
-GO
-
-CREATE PROCEDURE [HAY_TABLA].[sp_modificacion_rol]
-	@id	int,
-	@nombre nvarchar(50),
-	@estado bit
-AS
-BEGIN
-	SET NOCOUNT ON;
-	
-		if (exists(select id from [HAY_TABLA].ROL where Nombre = @nombre and id<> @id))
-		begin
-			RAISERROR(N'Ya existe un Rol con ese nombre',16,1)
-			return
-		end		
-	
-	UPDATE 
-		[HAY_TABLA].ROL
-	SET 
-		Nombre = @nombre,
-		Status = @estado
 	WHERE
 		id = @id
 END
@@ -569,120 +550,58 @@ BEGIN
 	WHERE USERNAME = @username
 END
 GO
-----------------------
-CREATE PROCEDURE [HAY_TABLA].[sp_select_funcionalidades_de_rol]
-	@rol_id int,
-	@nombre varchar(255) = null
-AS
-BEGIN
-	SET NOCOUNT ON;
 
-	SELECT 
-		 f.Id,
-		 f.Nombre,
-		 ISNULL((
-			SELECT
-				1
-			FROM 
-				FUNCIONALIDAD_ROL fr 
-			WHERE
-				fr.ID_FUNCIONALIDAD = f.id and 
-				fr.ID_ROL = @rol_id), 0) AS 'Seleccionado'
-	FROM
-		[HAY_TABLA].FUNCIONALIDAD f
-	WHERE
-		(@nombre is null) or (@nombre = f.Nombre)
-	ORDER BY
-		Nombre
-END
-GO
-
--- =============================================
--- Description:	Devuelve un listado de funcionalidades de un rol nuevo
--- =============================================
-CREATE PROCEDURE [HAY_TABLA].[sp_select_funcionalidades_de_rol_nuevo]
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	SELECT 
-		 f.Id,
-		 f.Nombre,
-		 0 as 'Seleccionado'
-	FROM
-		[HAY_TABLA].FUNCIONALIDAD f
-	ORDER BY
-		Nombre
-END
-GO
-
-CREATE PROCEDURE [HAY_TABLA].[sp_insertar_funcionalidad_a_rol]
-	@idRol int,
-	@idFuncionalidad int
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	INSERT INTO [HAY_TABLA].[FUNCIONALIDAD_ROL]
-           ([ID_ROL]
-           ,[ID_FUNCIONALIDAD])
-     VALUES
-           (@IdRol
-           ,@IdFuncionalidad)
-END
-GO
-
-CREATE PROCEDURE [HAY_TABLA].[sp_borrar_funcionalidades_de_rol]
-       @idRol int 
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	DELETE FROM
-		[HAY_TABLA].FUNCIONALIDAD_ROL
-	WHERE
-		ID_ROL = @idRol
-END
-GO
-
-CREATE PROCEDURE [HAY_TABLA].[sp_insertar_funcionalidad_en_rol]
-	@idRol int,
-	@idFuncionalidad int
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	INSERT INTO [HAY_TABLA].[FUNCIONALIDAD_ROL]
-           ([ID_ROL]
-           ,[ID_FUNCIONALIDAD])
-     VALUES
-           (@IdRol
-           ,@IdFuncionalidad)
-END
-GO
 /*************************************************** MIGRACION ******************************************************/
 --- MIGRACION - CIUDADES (Un total de 35 registros en tabla MASTER)
 		INSERT INTO [HAY_TABLA].CIUDAD
-		(NOMBRE)
+					(NOMBRE)
 		SELECT DISTINCT Ruta_Ciudad_Destino
   		FROM gd_esquema.Maestra
+  	print 'Ciudades migradas!'
 
 --- MIGRACION - TIPOS DE SERVICIOS (Un total de 3 registros en tabla MASTER)
 		INSERT INTO [HAY_TABLA].SERVICIO
-		(TIPOSERVICIO, PORCENTAJEADICIONAL)
+					(TIPOSERVICIO, PORCENTAJEADICIONAL)
   		SELECT DISTINCT Tipo_Servicio, 0
   		FROM gd_esquema.Maestra
+  	print 'Tipos de Servicio migrados!'
 
-/*
---- MIGRACION - BUTACAS (Un total de XXX registros en tabla MASTER)
-	SET IDENTITY_INSERT [HAY_TABLA].BUTACA ON
-		INSERT INTO [HAY_TABLA].BUTACA
-		(NUMERO, ID_AERONAVE, TIPO, PISO)
+--- MIGRACION - CLIENTES (Un total de 2594 registros en tabla MASTER)
+	INSERT INTO [HAY_TABLA].CLIENTE
+		(DNI, NOMBRE, APELLIDO, DIRECCION, TELEFONO, MAIL, FECHANACIMIENTO)	
+	SELECT 
+		Cli_Dni, Cli_Nombre, Cli_Apellido, Cli_Dir, Cli_Telefono, Cli_Mail, Cli_Fecha_Nac
+	FROM
+		gd_esquema.Maestra
+	group by
+		Cli_Dni, Cli_Nombre, Cli_Apellido, Cli_Dir, Cli_Telefono, Cli_Mail, Cli_Fecha_Nac
+	print 'Clientes migrados!'
 
-  		SELECT Butacaca_Nro, XXX , Butaca_Tipo, Butaca_Piso
-  		FROM gd_esquema.Maestra M
-  		WHERE M.Butaca_Tipo <> '0'
-  		GROUP BY M.Ruta_Ciudad_Origen, M.Ruta_Ciudad_Destino, M.Aeronave_Fabricante, M.Aeronave_Matricula, M.Aeronave_Modelo, M.Aeronave_KG_Disponibles
+--- MIGRACION - AERONAVES (Un total de  30 registros en tabla MASTER)
+	INSERT INTO [HAY_TABLA].AERONAVE
+				(ID_SERVICIO, MODELO, MATRICULA, FABRICANTE, CANTBUTACAS, ESPACIOKGENCOMIENDAS)
+   	SELECT 	SERVICIO.ID as "ID_SERVICIO", Aeronave_Modelo, Aeronave_Matricula, Aeronave_Fabricante, 
+  			MAX(Butaca_Nro) as "CANTBUTACAS", Aeronave_KG_Disponibles
+  	FROM 
+  		gd_esquema.Maestra, 
+  		[HAY_TABLA].SERVICIO
+  	WHERE 
+  		Tipo_Servicio = SERVICIO.TIPOSERVICIO
+  	GROUP BY 
+  		SERVICIO.ID, Aeronave_Modelo, Aeronave_Matricula, Aeronave_Fabricante, Aeronave_KG_Disponibles
+  	print 'Aeronaves migradas!'
 
-  	SET IDENTITY_INSERT [HAY_TABLA].BUTACA OFF
-*/
+--- MIGRACION - BUTACAS (Un total de 1337 registros en tabla MASTER)
+	INSERT INTO [HAY_TABLA].BUTACA
+				(NUMERO, ID_AERONAVE, TIPO, PISO)
+  	SELECT 	
+  			Butaca_Nro, A.ID , Butaca_Tipo, Butaca_Piso
+  	FROM 
+  		gd_esquema.Maestra, [HAY_TABLA].AERONAVE A
+  	WHERE 
+  		A.MATRICULA = Aeronave_Matricula
+  		AND Butaca_Tipo <> '0'
+  	GROUP BY 
+  		Butaca_Nro, Butaca_Tipo, Butaca_Piso, A.ID
+  	print 'Butacas migradas!'
+  	
