@@ -551,6 +551,106 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [HAY_TABLA].[sp_modificacion_rol]
+	@id	int,
+	@nombre nvarchar(50),
+	@estado bit
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+		if (exists(select id from [HAY_TABLA].ROL where Nombre = @nombre and id<> @id))
+		begin
+			RAISERROR(N'Ya existe un Rol con ese nombre',16,1)
+			return
+		end		
+	
+	UPDATE 
+		[HAY_TABLA].ROL
+	SET 
+		Nombre = @nombre,
+		Status = @estado
+	WHERE
+		id = @id
+END
+GO
+
+-----------------------
+CREATE PROCEDURE [HAY_TABLA].[sp_select_funcionalidades_de_rol]
+	@rol_id int,
+	@nombre varchar(255) = null
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT 
+		 f.Id,
+		 f.Nombre,
+		 ISNULL((
+			SELECT
+				1
+			FROM 
+				FUNCIONALIDAD_ROL fr 
+			WHERE
+				fr.ID_FUNCIONALIDAD = f.id and 
+				fr.ID_ROL = @rol_id), 0) AS 'Seleccionado'
+	FROM
+		[HAY_TABLA].FUNCIONALIDAD f
+	WHERE
+		(@nombre is null) or (@nombre = f.Nombre)
+	ORDER BY
+		Nombre
+END
+GO
+
+--- =============================================
+--- Description:	Devuelve un listado de funcionalidades de un rol nuevo
+--- =============================================
+CREATE PROCEDURE [HAY_TABLA].[sp_select_funcionalidades_de_rol_nuevo]
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT 
+		 f.Id,
+		 f.Nombre,
+		 0 as 'Seleccionado'
+	FROM
+		[HAY_TABLA].FUNCIONALIDAD f
+	ORDER BY
+		Nombre
+END
+GO
+
+CREATE PROCEDURE [HAY_TABLA].[sp_insertar_funcionalidad_a_rol]
+	@idRol int,
+	@idFuncionalidad int
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	INSERT INTO [HAY_TABLA].[FUNCIONALIDAD_ROL]
+           ([ID_ROL]
+           ,[ID_FUNCIONALIDAD])
+     VALUES
+           (@IdRol
+           ,@IdFuncionalidad)
+END
+GO
+
+CREATE PROCEDURE [HAY_TABLA].[sp_borrar_funcionalidades_de_rol]
+       @idRol int 
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DELETE FROM
+		[HAY_TABLA].FUNCIONALIDAD_ROL
+	WHERE
+		ID_ROL = @idRol
+END
+GO
+
 /*************************************************** MIGRACION ******************************************************/
 --- MIGRACION - CIUDADES (Un total de 35 registros en tabla MASTER)
 		INSERT INTO [HAY_TABLA].CIUDAD
